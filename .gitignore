@@ -2,4 +2,4 @@ data/config.json
 .idea/
 DailyReportCreater.iml
 out/
-timekeeper.json
+data/timekeeper.json

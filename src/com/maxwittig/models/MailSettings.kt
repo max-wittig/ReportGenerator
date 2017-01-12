@@ -1,6 +1,7 @@
+package com.maxwittig.models
+
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.jws.Oneway
 
 class MailSettings(smtpHost : String, port : Int, fromAddress : String, password : String, fromName : String, toAddress : String)
 {
