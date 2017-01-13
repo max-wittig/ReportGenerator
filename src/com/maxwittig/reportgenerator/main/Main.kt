@@ -1,10 +1,10 @@
 package com.maxwittig.reportgenerator.main
 
 import com.maxwittig.reportgenerator.builder.HTMLReportBuilder
-import com.maxwittig.reportgenerator.handler.MailHandler
-import com.maxwittig.reportgenerator.parser.ConfigParser
 import com.maxwittig.reportgenerator.builder.PlainTextReportBuilder
 import com.maxwittig.reportgenerator.builder.ReportType
+import com.maxwittig.reportgenerator.handler.MailHandler
+import com.maxwittig.reportgenerator.parser.ConfigParser
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
 import java.io.File
 
@@ -24,7 +24,6 @@ fun main(args: Array<String>)
         reportTypeArgumentString = args[2]
     }
 
-    println(reportTypeArgumentString)
     val reportType : ReportType = ReportType.valueOf(reportTypeArgumentString.toUpperCase())
 
     if(configFile.exists() && timekeeperFile.exists())

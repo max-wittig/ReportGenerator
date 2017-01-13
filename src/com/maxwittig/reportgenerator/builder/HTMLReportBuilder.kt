@@ -17,11 +17,13 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>) : ReportBui
     {
         stringWriter.buffer.setLength(0)
         addHead()
-        addTodayTaskTable()
+        val body = html.body()
+        addTodayTaskTable(body)
         html.br()
         html.p().text("Time worked today: " + getTotalTimeOfTasksToday()).end()
         html.br()
         html.p().text("Projects worked on today: " + getProjectsWorkedOnToday()).end()
+        body.end()
         html.endAll()
 
         return stringWriter.buffer.toString()
@@ -34,9 +36,8 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>) : ReportBui
         head.end()
     }
 
-    private fun addTodayTaskTable()
+    private fun addTodayTaskTable(body : Html)
     {
-        val body = html.body()
         val table = body.table()
         val tableHeadArray : Array<String> = arrayOf("Start", "End", "Duration", "ProjectName", "TaskName")
         val tHead = table.thead()
@@ -59,7 +60,6 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>) : ReportBui
         }
         tBody.end()
         table.end()
-        body.end()
     }
 
 }
