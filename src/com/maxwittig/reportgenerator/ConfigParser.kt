@@ -1,6 +1,6 @@
-package com.maxwittig
+package com.maxwittig.reportgenerator
 import com.google.gson.JsonParser
-import com.maxwittig.models.MailSettings
+import com.maxwittig.reportgenerator.models.MailSettings
 import java.io.File
 
 class ConfigParser(file : File)

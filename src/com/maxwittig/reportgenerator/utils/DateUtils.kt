@@ -1,4 +1,4 @@
-package com.maxwittig
+package com.maxwittig.reportgenerator.utils
 
 import java.text.SimpleDateFormat
 import java.util.*

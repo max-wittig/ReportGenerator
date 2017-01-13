@@ -1,7 +1,7 @@
-package com.maxwittig.parser
+package com.maxwittig.reportgenerator.parser
 
 import com.google.gson.JsonParser
-import com.maxwittig.models.TimekeeperTask
+import com.maxwittig.reportgenerator.models.TimekeeperTask
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

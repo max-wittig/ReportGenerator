@@ -1,5 +1,5 @@
-package com.maxwittig.handler
-import com.maxwittig.models.MailSettings
+package com.maxwittig.reportgenerator.handler
+import com.maxwittig.reportgenerator.models.MailSettings
 import org.simplejavamail.email.Email
 import org.simplejavamail.mailer.Mailer
 import org.simplejavamail.mailer.config.ServerConfig

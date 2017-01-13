@@ -1,6 +1,7 @@
-package com.maxwittig
+package com.maxwittig.reportgenerator
 
-import com.maxwittig.models.TimekeeperTask
+import com.maxwittig.reportgenerator.models.TimekeeperTask
+import com.maxwittig.reportgenerator.utils.isSameDay
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
