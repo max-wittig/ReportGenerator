@@ -6,9 +6,8 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>)
+class ReportBuilder(val timekeeperTasks : ArrayList<TimekeeperTask>)
 {
-    private val timekeeperTasks = timekeeperTasks
     private val todaysDate = Date()
     private var todayTasks = ArrayList<TimekeeperTask>()
 
@@ -70,6 +69,4 @@ class ReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>)
         }
         return sb.toString()
     }
-
-
 }

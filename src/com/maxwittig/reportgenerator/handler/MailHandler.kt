@@ -6,10 +6,8 @@ import org.simplejavamail.mailer.config.ServerConfig
 import org.simplejavamail.mailer.config.TransportStrategy
 import javax.mail.Message
 
-class MailHandler(mailSettings: MailSettings)
+class MailHandler(val mailSettings : MailSettings)
 {
-    private var mailSettings = mailSettings
-
     fun sendMail(toAddress: String, content : String)
     {
         val eMail = Email()
