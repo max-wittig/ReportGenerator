@@ -19,10 +19,9 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>) : ReportBui
         addHead()
         val body = html.body()
         addTodayTaskTable(body)
-        html.br()
         html.p().text("Time worked today: " + getTotalTimeOfTasksToday()).end()
-        html.br()
-        html.p().text("Projects worked on today: " + getProjectsWorkedOnToday()).end()
+        html.b().text("Projects worked on today: ").end()
+        html.p().text(getProjectsWorkedOnToday()).end()
         body.end()
         html.endAll()
 

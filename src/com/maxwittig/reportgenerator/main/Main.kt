@@ -42,5 +42,7 @@ fun main(args: Array<String>)
             val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks())
             mailSender.sendHTMLMail(mailSettings.toAddress, reportBuilder.getReport())
         }
+
+        println("Mail send successfully!")
     }
 }

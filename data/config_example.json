@@ -1,0 +1,7 @@
+{
+  "fromAddress":"max@example.com",
+  "toAddress":"max@example.com",
+  "password":"Testing123",
+  "smtpHost": "smtp.example.com",
+  "port":500
+}
