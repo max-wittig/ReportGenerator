@@ -2,7 +2,7 @@ package com.maxwittig.reportgenerator.models
 
 import java.util.*
 
-class TimekeeperTask(taskName : String, projectName : String, startTime : Date, endTime : Date, duration : Int)
+class TimekeeperTask(taskName : String, projectName : String, startTime : Date, endTime : Date, duration : Long)
 {
     val taskName = taskName
         get

@@ -1,26 +1,21 @@
-package com.maxwittig.reportgenerator
+package com.maxwittig.reportgenerator.builder
 
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.isSameDay
+import com.maxwittig.reportgenerator.utils.getTimeStringFromSeconds
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ReportBuilder(val timekeeperTasks : ArrayList<TimekeeperTask>)
-{
-    private val todaysDate = Date()
-    private var todayTasks = ArrayList<TimekeeperTask>()
 
-    fun getReport() : String
+abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperTask>)
+{
+    protected val todaysDate = Date()
+    protected val todayTasks = ArrayList<TimekeeperTask>()
+
+    init
     {
         parseTodayTasks()
-
-        val stringBuilder = StringBuilder()
-
-        stringBuilder.append("Time worked today: " + getTotalTimeOfTasksToday())
-        stringBuilder.append("\n")
-        stringBuilder.append("Projects worked on today: " + getProjectsWorkedOnToday())
-        return stringBuilder.toString()
     }
 
     private fun parseTodayTasks()
@@ -32,7 +27,7 @@ class ReportBuilder(val timekeeperTasks : ArrayList<TimekeeperTask>)
         }
     }
 
-    private fun getTotalTimeOfTasksToday() : String
+    protected fun getTotalTimeOfTasksToday() : String
     {
         var totalTime : Long = 0
         for(task in todayTasks)
@@ -40,11 +35,10 @@ class ReportBuilder(val timekeeperTasks : ArrayList<TimekeeperTask>)
             totalTime += task.duration
         }
 
-
-        return LocalTime.ofSecondOfDay(totalTime).format(DateTimeFormatter.ISO_TIME).toString()
+        return getTimeStringFromSeconds(totalTime)
     }
 
-    private fun getProjectsWorkedOnToday() : String
+    protected fun getProjectsWorkedOnToday() : String
     {
         val projectsList = ArrayList<String>()
         for(task in todayTasks)
@@ -58,7 +52,7 @@ class ReportBuilder(val timekeeperTasks : ArrayList<TimekeeperTask>)
         return stringListToString(projectsList)
     }
 
-    private fun stringListToString(stringList : ArrayList<String>) : String
+    protected fun stringListToString(stringList : ArrayList<String>) : String
     {
         val sb = StringBuilder()
         for(s in stringList)
@@ -69,4 +63,6 @@ class ReportBuilder(val timekeeperTasks : ArrayList<TimekeeperTask>)
         }
         return sb.toString()
     }
+
+    abstract fun getReport() : String
 }

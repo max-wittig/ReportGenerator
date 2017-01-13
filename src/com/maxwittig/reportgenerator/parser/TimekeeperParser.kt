@@ -6,9 +6,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimekeeperParser(file : File)
+class TimekeeperParser(private val file : File)
 {
-    private val file = file
     private val timekeeperDateFormat = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
 
     init
@@ -32,7 +31,7 @@ class TimekeeperParser(file : File)
             val taskName = taskObject.get("taskName").asString
             val startTime : Date = timekeeperDateFormat.parse(taskObject.get("startTime").asString)
             val endTime : Date = timekeeperDateFormat.parse(taskObject.get("endTime").asString)
-            val duration = taskObject.get("durationInSec").asInt
+            val duration = taskObject.get("durationInSec").asLong
             val task = TimekeeperTask(taskName, projectName, startTime, endTime, duration)
             returnList.add(task)
         }

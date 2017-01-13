@@ -3,10 +3,8 @@ import com.google.gson.JsonParser
 import com.maxwittig.reportgenerator.models.MailSettings
 import java.io.File
 
-class ConfigParser(file : File)
+class ConfigParser(private val file : File)
 {
-    private val file : File = file
-
     init
     {
         if(!file.exists())
