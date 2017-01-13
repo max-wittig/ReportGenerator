@@ -12,9 +12,7 @@ fun main(args: Array<String>)
 {
     if(args.size < 2)
     {
-        println("Missing arguments")
-        println("Required arguments: <configFileLocation> <timekeeper.json file location> <reportType>")
-        return
+        throw IllegalArgumentException("Required arguments: <configFileLocation> <timekeeper.json_file_location> <reportType>[html||plan]")
     }
     val configFile = File(args[0])
     val timekeeperFile = File(args[1])
