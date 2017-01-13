@@ -1,4 +1,4 @@
-package com.maxwittig.reportgenerator
+package com.maxwittig.reportgenerator.parser
 import com.google.gson.JsonParser
 import com.maxwittig.reportgenerator.models.MailSettings
 import java.io.File

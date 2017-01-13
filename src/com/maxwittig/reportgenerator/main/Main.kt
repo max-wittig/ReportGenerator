@@ -1,7 +1,7 @@
 package com.maxwittig.reportgenerator.main
 
 import com.maxwittig.reportgenerator.handler.MailHandler
-import com.maxwittig.reportgenerator.ConfigParser
+import com.maxwittig.reportgenerator.parser.ConfigParser
 import com.maxwittig.reportgenerator.ReportBuilder
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
 import java.io.File
