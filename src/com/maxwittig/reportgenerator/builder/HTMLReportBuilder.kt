@@ -3,7 +3,6 @@ package com.maxwittig.reportgenerator.builder
 import com.googlecode.jatl.Html
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.getTimeStringFromSeconds
-import sun.util.resources.cldr.sbp.CalendarData_sbp_TZ
 import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
