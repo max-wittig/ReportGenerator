@@ -14,7 +14,7 @@ class TimekeeperParser(private val file : File)
     {
         if(!file.exists())
         {
-            print(file.name + "doesn't exist!")
+            println(file.name + " doesn't exist!")
             System.exit(1)
         }
     }

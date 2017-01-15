@@ -1,6 +1,6 @@
 package com.maxwittig.reportgenerator.parser
 import com.google.gson.JsonParser
-import com.maxwittig.reportgenerator.models.MailSettings
+import com.maxwittig.reportgenerator.models.Settings
 import java.io.File
 
 class ConfigParser(private val file : File)
@@ -14,7 +14,7 @@ class ConfigParser(private val file : File)
         }
     }
 
-    fun getMailSettings() : MailSettings
+    fun getSettings() : Settings
     {
         val jsonObject = JsonParser().parse(file.readText()).asJsonObject
         val host = jsonObject.get("smtpHost").asString
@@ -22,7 +22,9 @@ class ConfigParser(private val file : File)
         val fromAddress = jsonObject.get("fromAddress").asString
         val toAddress = jsonObject.get("toAddress").asString
         val password = jsonObject.get("password").asString
-        return MailSettings(host, port, fromAddress, password, fromAddress, toAddress)
+        val weeklyReport = jsonObject.get("weeklyReport").asBoolean
+        val monthlyReport = jsonObject.get("monthlyReport").asBoolean
+        return Settings(host, port, fromAddress, password, fromAddress, toAddress, weeklyReport, monthlyReport)
     }
 
 

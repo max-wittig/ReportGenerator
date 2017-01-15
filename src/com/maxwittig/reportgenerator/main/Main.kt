@@ -1,8 +1,9 @@
 package com.maxwittig.reportgenerator.main
 
+import com.maxwittig.reportgenerator.MailType
+import com.maxwittig.reportgenerator.ReportType
 import com.maxwittig.reportgenerator.builder.HTMLReportBuilder
 import com.maxwittig.reportgenerator.builder.PlainTextReportBuilder
-import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.handler.MailHandler
 import com.maxwittig.reportgenerator.parser.ConfigParser
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
@@ -10,35 +11,42 @@ import java.io.File
 
 fun main(args: Array<String>)
 {
-    if(args.size < 2)
+    if (args.size < 2)
     {
-        throw IllegalArgumentException("Required arguments: <configFileLocation> <timekeeper.json_file_location> <reportType>[html||plan]")
+        throw IllegalArgumentException("Required arguments: <configFileLocation> <timekeeper.json_file_location> <mailType>[html||plan]")
     }
     val configFile = File(args[0])
     val timekeeperFile = File(args[1])
-    var reportTypeArgumentString : String = "PLAIN"
-    if(args.size == 3)
+    var reportTypeArgumentString: String = "HTML"
+    if (args.size == 3)
     {
         reportTypeArgumentString = args[2]
     }
 
-    val reportType : ReportType = ReportType.valueOf(reportTypeArgumentString.toUpperCase())
+    val mailType: MailType = MailType.valueOf(reportTypeArgumentString.toUpperCase())
 
-    if(configFile.exists() && timekeeperFile.exists())
+    if (configFile.exists() && timekeeperFile.exists())
     {
         val parser = ConfigParser(configFile)
-        val mailSettings = parser.getMailSettings()
-        val mailSender = MailHandler(mailSettings)
+        val settings = parser.getSettings()
+        val mailSender = MailHandler(settings)
         val timekeeperParser = TimekeeperParser(timekeeperFile)
-        if(reportType == ReportType.PLAIN)
+        if (mailType == MailType.PLAIN)
         {
-            val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks())
-            mailSender.sendPlainMail(mailSettings.toAddress, reportBuilder.getReport())
+            val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled))
+            //check if mail should be send: e.g. do not send, if today is empty, but send regardless of today, if monthly report
+            if (reportBuilder.shouldSendMail())
+            {
+                mailSender.sendPlainMail(settings.toAddress, reportBuilder.getReport())
+            }
         }
-        else if(reportType == ReportType.HTML)
+        else if (mailType == MailType.HTML)
         {
-            val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks())
-            mailSender.sendHTMLMail(mailSettings.toAddress, reportBuilder.getReport())
+            val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks(), ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled))
+            if (reportBuilder.shouldSendMail())
+            {
+                mailSender.sendHTMLMail(settings.toAddress, reportBuilder.getReport())
+            }
         }
 
         println("Mail send successfully!")

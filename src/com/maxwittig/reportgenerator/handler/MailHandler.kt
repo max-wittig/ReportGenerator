@@ -1,18 +1,20 @@
 package com.maxwittig.reportgenerator.handler
-import com.maxwittig.reportgenerator.models.MailSettings
+import com.maxwittig.reportgenerator.models.Settings
 import org.simplejavamail.email.Email
 import org.simplejavamail.mailer.Mailer
 import org.simplejavamail.mailer.config.ServerConfig
 import org.simplejavamail.mailer.config.TransportStrategy
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.mail.Message
 
-class MailHandler(val mailSettings : MailSettings)
+class MailHandler(val settings: Settings)
 {
     private fun getGeneralMailObject(toAddress: String) : Email
     {
         val eMail = Email()
-        eMail.setFromAddress(mailSettings.fromName, mailSettings.fromAddress)
-        eMail.subject = mailSettings.getSubject()
+        eMail.setFromAddress(settings.fromName, settings.fromAddress)
+        eMail.subject = getSubject()
         eMail.addRecipient(toAddress, toAddress, Message.RecipientType.TO)
         return eMail
     }
@@ -33,8 +35,10 @@ class MailHandler(val mailSettings : MailSettings)
 
     private fun send(eMail : Email)
     {
-        Mailer(ServerConfig(mailSettings.smtpHost, mailSettings.port, mailSettings.fromAddress, mailSettings.password)
+        Mailer(ServerConfig(settings.smtpHost, settings.port, settings.fromAddress, settings.password)
                 , TransportStrategy.SMTP_TLS).sendMail(eMail)
     }
+
+    private fun getSubject() : String = "Report from " +  SimpleDateFormat("dd.MM.YYYY").format(Date())
 
 }
