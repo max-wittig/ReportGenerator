@@ -2,10 +2,9 @@ package com.maxwittig.reportgenerator.utils
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 fun isSameDay(date1 : Date, date2 : Date) : Boolean
 {
@@ -40,5 +39,8 @@ fun isLastDayOfTheWeek() : Boolean
 
 fun getTimeStringFromSeconds(totalTime : Long) : String
 {
-    return LocalTime.ofSecondOfDay(totalTime).format(DateTimeFormatter.ISO_TIME).toString()
+    val hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(totalTime),
+            TimeUnit.MILLISECONDS.toMinutes(totalTime) % TimeUnit.HOURS.toMinutes(1),
+            TimeUnit.MILLISECONDS.toSeconds(totalTime) % TimeUnit.MINUTES.toSeconds(1))
+    return hms
 }

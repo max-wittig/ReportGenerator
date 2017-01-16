@@ -3,3 +3,4 @@ data/config.json
 DailyReportCreater.iml
 out/
 data/timekeeper.json
+data/testResults/

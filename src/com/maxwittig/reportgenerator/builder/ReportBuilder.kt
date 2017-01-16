@@ -5,55 +5,70 @@ import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.getTimeStringFromSeconds
 import com.maxwittig.reportgenerator.utils.isSameDay
 import com.maxwittig.reportgenerator.utils.isSameMonth
+import com.maxwittig.reportgenerator.utils.isSameWeek
 import java.util.*
 
 
-abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperTask>, private val reportType: ReportType)
+abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperTask>, private val reportType: ReportType, protected val todaysDate : Date = Date())
 {
-    protected val todaysDate = Date()
-    protected val todayTasks = ArrayList<TimekeeperTask>()
-    protected val monthlyTasks = ArrayList<TimekeeperTask>()
-    protected val weeklyTasks = ArrayList<TimekeeperTask>()
+    protected var todayTasks = ArrayList<TimekeeperTask>()
+    protected var monthlyTasks = ArrayList<TimekeeperTask>()
+    protected var weeklyTasks = ArrayList<TimekeeperTask>()
 
     init
     {
-        parseTodayTasks()
+        todayTasks = getParsedTodayTasks()
         if(reportType == ReportType.MONTHLY)
         {
-            parseMonthlyTasks()
+            monthlyTasks = getParsedMonthlyTasks()
         }
         else
         if(reportType == ReportType.WEEKLY)
         {
-            parseWeeklyTasks()
+            weeklyTasks = getParsedWeeklyTasks()
         }
     }
 
-    private fun parseWeeklyTasks()
+    private fun getParsedWeeklyTasks() : ArrayList<TimekeeperTask>
     {
+        val tasks = ArrayList<TimekeeperTask>()
+        for(task in timekeeperTasks)
+        {
+            if(isSameWeek(todaysDate, task.startTime))
+                tasks.add(task)
+        }
+        return tasks
+    }
+
+    private fun getParsedMonthlyTasks() : ArrayList<TimekeeperTask>
+    {
+        var tasks = ArrayList<TimekeeperTask>()
         for(task in timekeeperTasks)
         {
             if(isSameMonth(todaysDate, task.startTime))
-                monthlyTasks.add(task)
+            {
+                tasks.add(task)
+            }
         }
-    }
-
-    private fun parseMonthlyTasks()
-    {
-        for(task in timekeeperTasks)
+        //sort after duration and only show longest 10
+        tasks.sort({ task2, task1 -> task1.duration.compareTo(task2.duration)})
+        if(tasks.size > 10)
         {
-            if(isSameMonth(todaysDate, task.startTime))
-                monthlyTasks.add(task)
+           tasks = ArrayList<TimekeeperTask>(tasks.subList(0, 10))
         }
+
+        return tasks
     }
 
-    private fun parseTodayTasks()
+    private fun getParsedTodayTasks() : ArrayList<TimekeeperTask>
     {
+        val tasks = ArrayList<TimekeeperTask>()
         for(task in timekeeperTasks)
         {
             if(isSameDay(todaysDate, task.startTime))
-                todayTasks.add(task)
+                tasks.add(task)
         }
+        return tasks
     }
 
     protected fun getTotalTimeOfTasksToday() : String

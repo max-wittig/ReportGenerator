@@ -31,9 +31,10 @@ fun main(args: Array<String>)
         val settings = parser.getSettings()
         val mailSender = MailHandler(settings)
         val timekeeperParser = TimekeeperParser(timekeeperFile)
+        val reportType = ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled)
         if (mailType == MailType.PLAIN)
         {
-            val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled))
+            val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), reportType)
             //check if mail should be send: e.g. do not send, if today is empty, but send regardless of today, if monthly report
             if (reportBuilder.shouldSendMail())
             {
@@ -42,7 +43,7 @@ fun main(args: Array<String>)
         }
         else if (mailType == MailType.HTML)
         {
-            val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks(), ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled))
+            val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks(), reportType)
             if (reportBuilder.shouldSendMail())
             {
                 mailSender.sendHTMLMail(settings.toAddress, reportBuilder.getReport())

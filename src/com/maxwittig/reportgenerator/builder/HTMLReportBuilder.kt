@@ -4,11 +4,12 @@ import com.googlecode.jatl.Html
 import com.maxwittig.reportgenerator.ReportType
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.getTimeStringFromSeconds
+import java.io.File
 import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportType: ReportType) : ReportBuilder(timekeeperTasks, reportType)
+class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportType: ReportType, todaysDate : Date = Date()) : ReportBuilder(timekeeperTasks, reportType, todaysDate = todaysDate)
 {
     val stringWriter = StringWriter()
     val html = Html(stringWriter)
@@ -19,13 +20,26 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
         addHead()
         val body = html.body()
 
-        if(todayTasks.isNotEmpty())
-        {
-            addTodayHTML(body)
-        }
         if(reportType == ReportType.MONTHLY && monthlyTasks.isNotEmpty())
         {
+            body.h1().text("Your " + reportType.toString().toLowerCase() + " report").end()
+            body.h3().text("Your 10 longest tasks this month").end()
             addMonthlyHTML(body)
+        }
+        else
+        if(reportType == ReportType.WEEKLY && weeklyTasks.isNotEmpty())
+        {
+            body.h1().text("Your " + reportType.toString().toLowerCase() + " report").end()
+            addWeeklyHTML(body)
+        }
+
+        body.br().end()
+        body.hr().end()
+
+        if(todayTasks.isNotEmpty())
+        {
+            body.h1().text("Your daily report").end()
+            addTodayHTML(body)
         }
 
         body.end()
@@ -37,21 +51,26 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
     private fun addHead()
     {
         val head = html.head()
-        head.style().type("text/css").text("td{ text-align: center;} thead{ background: lightgray } tbody{ background: #f2f2f2} table { width: 100%;}").end()
+        head.style().type("text/css").text(File("src/com/maxwittig/reportgenerator/builder/css/reportStyle.css").readText()).end()
         head.end()
     }
 
     private fun addMonthlyHTML(body : Html)
     {
-        val format = SimpleDateFormat("D: HH:mm:ss")
+        val format = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
         addTaskTable(monthlyTasks, body, format)
         body.br()
         addProjectTable(body, getMonthlyProjectTimeHashMap())
     }
 
+    private fun addWeeklyHTML(body : Html)
+    {
+
+    }
+
     private fun addTodayHTML(body : Html)
     {
-        val format = SimpleDateFormat("HH:mm:ss")
+        val format = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
         addTaskTable(todayTasks, body, format)
         body.br().end()
         addProjectTable(body, getDailyProjectTimeHashMap())
