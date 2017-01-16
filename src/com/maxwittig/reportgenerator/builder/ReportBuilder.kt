@@ -2,7 +2,7 @@ package com.maxwittig.reportgenerator.builder
 
 import com.maxwittig.reportgenerator.ReportType
 import com.maxwittig.reportgenerator.models.TimekeeperTask
-import com.maxwittig.reportgenerator.utils.getTimeStringFromSeconds
+import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
 import com.maxwittig.reportgenerator.utils.isSameDay
 import com.maxwittig.reportgenerator.utils.isSameMonth
 import com.maxwittig.reportgenerator.utils.isSameWeek
@@ -93,7 +93,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             totalTime += task.duration
         }
-        return getTimeStringFromSeconds(totalTime)
+        return getTimeStringFromMilliSeconds(totalTime*1000)
     }
 
     protected fun getMonthlyProjectTimeHashMap() : HashMap<String, Long>

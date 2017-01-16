@@ -3,5 +3,8 @@
   "toAddress":"max@example.com",
   "password":"Testing123",
   "smtpHost": "smtp.example.com",
-  "port":500
+  "port":500,
+  "dailyReport": true,
+  "weeklyReport": false,
+  "monthlyReport": true
 }

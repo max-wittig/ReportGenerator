@@ -17,7 +17,7 @@ enum class ReportType
             {
                 return MONTHLY
             }
-
+            else
             if(weeklyEnabled && isLastDayOfTheWeek())
             {
                 return WEEKLY

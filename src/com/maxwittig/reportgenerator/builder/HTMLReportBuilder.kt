@@ -3,8 +3,8 @@ package com.maxwittig.reportgenerator.builder
 import com.googlecode.jatl.Html
 import com.maxwittig.reportgenerator.ReportType
 import com.maxwittig.reportgenerator.models.TimekeeperTask
-import com.maxwittig.reportgenerator.utils.getTimeStringFromSeconds
-import java.io.File
+import com.maxwittig.reportgenerator.utils.FileUtils
+import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
 import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,7 +23,6 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
         if(reportType == ReportType.MONTHLY && monthlyTasks.isNotEmpty())
         {
             body.h1().text("Your " + reportType.toString().toLowerCase() + " report").end()
-            body.h3().text("Your 10 longest tasks this month").end()
             addMonthlyHTML(body)
         }
         else
@@ -33,8 +32,11 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
             addWeeklyHTML(body)
         }
 
-        body.br().end()
-        body.hr().end()
+        if(reportType != ReportType.DAILY)
+        {
+            body.br().end()
+            body.hr().end()
+        }
 
         if(todayTasks.isNotEmpty())
         {
@@ -51,12 +53,14 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
     private fun addHead()
     {
         val head = html.head()
-        head.style().type("text/css").text(File("src/com/maxwittig/reportgenerator/builder/css/reportStyle.css").readText()).end()
+        val css = FileUtils.getFileContentFromJar("/com/maxwittig/reportgenerator/builder/css/reportStyle.css")
+        head.style().type("text/css").text(css).end()
         head.end()
     }
 
     private fun addMonthlyHTML(body : Html)
     {
+        body.h3().text("Your 10 longest tasks this month").end()
         val format = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
         addTaskTable(monthlyTasks, body, format)
         body.br()
@@ -71,8 +75,10 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
     private fun addTodayHTML(body : Html)
     {
         val format = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
+        body.h3().text("Daily Tasks")
         addTaskTable(todayTasks, body, format)
         body.br().end()
+        body.h3().text("Daily Projects")
         addProjectTable(body, getDailyProjectTimeHashMap())
     }
 
@@ -87,7 +93,7 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
             //add projectname
             tr.td().text(key).end()
             //add duration
-            tr.td().text(getTimeStringFromSeconds(hashMap.get(key)!!)).end()
+            tr.td().text(getTimeStringFromMilliSeconds(hashMap.get(key)!!*1000)).end()
             tr.end()
         }
 
@@ -135,7 +141,7 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
             val row = tBody.tr()
             row.td().text(format.format(task.startTime)).end()
             row.td().text(format.format(task.endTime)).end()
-            row.td().text(getTimeStringFromSeconds(task.duration)).end()
+            row.td().text(getTimeStringFromMilliSeconds(task.duration*1000)).end()
             row.td().text(task.projectName).end()
             row.td().text(task.taskName).end()
             row.end()

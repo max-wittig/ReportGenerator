@@ -37,7 +37,7 @@ fun isLastDayOfTheWeek() : Boolean
     return now.dayOfWeek.value == 7
 }
 
-fun getTimeStringFromSeconds(totalTime : Long) : String
+fun getTimeStringFromMilliSeconds(totalTime : Long) : String
 {
     val hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(totalTime),
             TimeUnit.MILLISECONDS.toMinutes(totalTime) % TimeUnit.HOURS.toMinutes(1),
