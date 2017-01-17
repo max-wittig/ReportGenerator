@@ -3,6 +3,7 @@ package com.maxwittig.reportgenerator.parser
 import com.google.gson.JsonParser
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -15,7 +16,7 @@ class TimekeeperParser(private val file : File)
         if(!file.exists())
         {
             println(file.name + " doesn't exist!")
-            System.exit(1)
+            throw IOException("File not found")
         }
     }
 

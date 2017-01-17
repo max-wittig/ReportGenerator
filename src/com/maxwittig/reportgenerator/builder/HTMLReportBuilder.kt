@@ -56,17 +56,17 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, val reportT
         return stringWriter.buffer.toString()
     }
 
-    private fun addYearlyHTML(body: Html)
-    {
-        addHTML(yearlyTasks, body, reportType, taskString = "Your yearly tasks")
-    }
-
     private fun addHead()
     {
         val head = html.head()
         val css = FileUtils.getFileContentFromJar("/com/maxwittig/reportgenerator/builder/css/reportStyle.css")
         head.style().type("text/css").text(css).end()
         head.end()
+    }
+
+    private fun addYearlyHTML(body: Html)
+    {
+        addHTML(yearlyTasks, body, reportType, taskString = "Your yearly tasks")
     }
 
     private fun addMonthlyHTML(body : Html)

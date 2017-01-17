@@ -18,4 +18,9 @@ class TimekeeperTask(taskName : String, projectName : String, startTime : Date, 
     var shownInTaskList = false
         get
         set
+
+    fun clone() : TimekeeperTask
+    {
+        return TimekeeperTask(this.taskName, this.projectName, this.startTime, this.endTime, this.duration)
+    }
 }

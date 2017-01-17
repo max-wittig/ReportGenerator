@@ -1,8 +1,6 @@
 package com.maxwittig.reportgenerator.builder
 
-import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.models.ProjectHolder
-import com.maxwittig.reportgenerator.models.TaskHolder
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.*
 import java.text.SimpleDateFormat
@@ -44,7 +42,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             if(isSameWeek(todaysDate, task.startTime))
             {
-                tasks.add(task)
+                tasks.add(task.clone())
             }
         }
 
@@ -59,7 +57,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             if(isSameYear(todaysDate, task.startTime))
             {
-                tasks.add(task)
+                tasks.add(task.clone())
             }
         }
         return getLongestTasksInYear(tasks)
@@ -67,27 +65,19 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
 
     private fun getLongestTasksInYear(tasks: ArrayList<TimekeeperTask>) : ArrayList<TimekeeperTask>
     {
-        //grouped tasks
-        val taskHolder = getGroupedTaskHolder(tasks)
-        var index = 0
-        for(currentTask in taskHolder.tasks)
+        tasks.sort{ task2, task1 -> task1.duration.compareTo(task2.duration)}
+        val taskLimit = 10
+        if(tasks.size > taskLimit)
         {
-            currentTask.shownInTaskList = true
-            index++
-            if(index >= 10)
-                break
+            for(currentLongestTask in tasks)
+            {
+                if(tasks.indexOf(currentLongestTask) >= taskLimit)
+                    break
+                currentLongestTask.shownInTaskList = true
+
+            }
         }
         return tasks
-    }
-
-    private fun getGroupedTaskHolder(tasks: ArrayList<TimekeeperTask>) : TaskHolder
-    {
-        val taskHolder = TaskHolder()
-        for(currentTask in tasks)
-        {
-            taskHolder.addTask(currentTask)
-        }
-        return taskHolder
     }
 
     /**
@@ -149,7 +139,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             if(isSameMonth(todaysDate, task.startTime))
             {
-                tasks.add(task)
+                tasks.add(task.clone())
             }
         }
         //sort after duration and only show longest 10
@@ -159,7 +149,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             for(currentLongestTask in tasks)
             {
-                if(tasks.indexOf(currentLongestTask)+1 >= taskLimit)
+                if(tasks.indexOf(currentLongestTask) >= taskLimit)
                     break
                 currentLongestTask.shownInTaskList = true
 
@@ -182,7 +172,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
             if(isSameDay(todaysDate, task.startTime))
             {
                 task.shownInTaskList = true
-                tasks.add(task)
+                tasks.add(task.clone())
             }
         }
         return tasks
