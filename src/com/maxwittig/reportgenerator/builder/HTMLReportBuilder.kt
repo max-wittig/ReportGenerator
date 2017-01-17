@@ -66,7 +66,7 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, val reportT
 
     private fun addYearlyHTML(body: Html)
     {
-        addHTML(yearlyTasks, body, reportType, taskString = "Your yearly tasks")
+        addHTML(yearlyTasks, body, reportType, taskString = "Your 10 longest tasks this year")
     }
 
     private fun addMonthlyHTML(body : Html)

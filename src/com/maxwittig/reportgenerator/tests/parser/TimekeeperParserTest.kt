@@ -1,4 +1,4 @@
-package com.maxwittig.reportgenerator.tests
+package com.maxwittig.reportgenerator.tests.parser
 
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
 import org.junit.Assert.assertEquals

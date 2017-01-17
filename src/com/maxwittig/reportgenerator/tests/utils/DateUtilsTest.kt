@@ -1,4 +1,4 @@
-package com.maxwittig.reportgenerator.tests
+package com.maxwittig.reportgenerator.tests.utils
 
 import com.maxwittig.reportgenerator.utils.isSameDay
 import com.maxwittig.reportgenerator.utils.isSameMonth

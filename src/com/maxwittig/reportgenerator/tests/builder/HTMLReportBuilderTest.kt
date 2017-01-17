@@ -1,4 +1,4 @@
-package com.maxwittig.reportgenerator.tests
+package com.maxwittig.reportgenerator.tests.builder
 
 import com.maxwittig.reportgenerator.builder.HTMLReportBuilder
 import com.maxwittig.reportgenerator.builder.ReportType
