@@ -3,10 +3,7 @@ package com.maxwittig.reportgenerator.builder
 import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.models.ProjectHolder
 import com.maxwittig.reportgenerator.models.TimekeeperTask
-import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
-import com.maxwittig.reportgenerator.utils.isSameDay
-import com.maxwittig.reportgenerator.utils.isSameMonth
-import com.maxwittig.reportgenerator.utils.isSameWeek
+import com.maxwittig.reportgenerator.utils.*
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.util.*
@@ -14,13 +11,20 @@ import java.util.*
 
 abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperTask>, private val reportType: ReportType, protected val todaysDate : Date = Date())
 {
-    protected var todayTasks = ArrayList<TimekeeperTask>()
+    protected var dailyTasks = ArrayList<TimekeeperTask>()
     protected var monthlyTasks = ArrayList<TimekeeperTask>()
     protected var weeklyTasks = ArrayList<TimekeeperTask>()
+    protected var yearlyTasks = ArrayList<TimekeeperTask>()
 
     init
     {
-        todayTasks = getParsedTodayTasks()
+        //dailyTasks are always parsed
+        dailyTasks = getParsedDailyTasks()
+        if(reportType == ReportType.YEARLY)
+        {
+            yearlyTasks = getParsedYearlyTasks()
+        }
+        else
         if(reportType == ReportType.MONTHLY)
         {
             monthlyTasks = getParsedMonthlyTasks()
@@ -46,6 +50,21 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         return getLongestTaskPerDayInTheWeek(tasks)
     }
 
+
+    private fun getParsedYearlyTasks() : ArrayList<TimekeeperTask>
+    {
+        val tasks = ArrayList<TimekeeperTask>()
+        for(task in timekeeperTasks)
+        {
+            if(isSameYear(todaysDate, task.startTime))
+            {
+                task.shownInTaskList = true
+                tasks.add(task)
+            }
+        }
+        return tasks
+    }
+
     private fun getLongestTaskPerDayInTheWeek(tasks: ArrayList<TimekeeperTask>) : ArrayList<TimekeeperTask>
     {
         for(currentDay in DayOfWeek.values())
@@ -69,6 +88,10 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         return tasks
     }
 
+    /**
+     * helper method for getLongestTaskPerDayInTheWeek()
+     * @returns ArrayList<TimeKeeperTask> all tasks which are from a specific weekday
+     */
     private fun getTasksPerDay(tasks: ArrayList<TimekeeperTask>, dayOfWeek: DayOfWeek) : ArrayList<TimekeeperTask>
     {
         val taskList = ArrayList<TimekeeperTask>()
@@ -84,6 +107,12 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         return taskList
     }
 
+    /**
+     * parses monthly tasks
+     * @returns ArrayList<TimekeeperTask> Top 10 tasks of the month
+     * tasks are not removed --> whole month ArrayList is returned back,
+     * but shownInTaskList is set to true for the task which are in the top 10 duration in a month
+     */
     private fun getParsedMonthlyTasks() : ArrayList<TimekeeperTask>
     {
         val tasks = ArrayList<TimekeeperTask>()
@@ -112,7 +141,11 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         return tasks
     }
 
-    private fun getParsedTodayTasks() : ArrayList<TimekeeperTask>
+    /**
+     * task.shownInTaskList = true, because daily tasks are not filtered and every task from the current day
+     * is shown
+     */
+    private fun getParsedDailyTasks() : ArrayList<TimekeeperTask>
     {
         val tasks = ArrayList<TimekeeperTask>()
         for(task in timekeeperTasks)
@@ -126,22 +159,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         return tasks
     }
 
-    protected fun getTotalTimeOfTasksToday() : String
-    {
-        return getTotalTimeOfTasks(todayTasks)
-    }
-
-    protected fun getTotalTimeOfTasksMonthly() : String
-    {
-        return getTotalTimeOfTasks(monthlyTasks)
-    }
-
-    protected fun getTotalTimeOfTasksWeekly() : String
-    {
-        return getTotalTimeOfTasks(weeklyTasks)
-    }
-
-    private fun getTotalTimeOfTasks(tasks: ArrayList<TimekeeperTask>) : String
+    fun getTotalTimeOfTasks(tasks: ArrayList<TimekeeperTask>) : String
     {
         var totalTime : Long = 0
         for(task in tasks)
@@ -167,7 +185,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
 
     fun shouldSendMail() : Boolean
     {
-        if(todayTasks.isEmpty() && reportType == ReportType.DAILY)
+        if(dailyTasks.isEmpty() && reportType == ReportType.DAILY)
         {
             return false
         }
@@ -178,6 +196,11 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         }
 
         if(monthlyTasks.isEmpty() && reportType == ReportType.MONTHLY)
+        {
+            return false
+        }
+
+        if(yearlyTasks.isEmpty() && reportType == ReportType.YEARLY)
         {
             return false
         }

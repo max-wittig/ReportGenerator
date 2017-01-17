@@ -8,4 +8,5 @@ class Settings(val smtpHost : String,
                val fromName : String,
                val toAddress : String,
                val weeklyReportEnabled : Boolean,
-               val monthlyReportEnabled : Boolean)
+               val monthlyReportEnabled : Boolean,
+               val yearlyReportEnabled : Boolean)

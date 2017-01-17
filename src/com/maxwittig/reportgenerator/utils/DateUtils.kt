@@ -24,6 +24,12 @@ fun isSameMonth(date1 : Date, date2 : Date) : Boolean
     return simpleFormat.format(date1) == simpleFormat.format(date2)
 }
 
+fun isSameYear(date1 : Date, date2 : Date) : Boolean
+{
+    val simpleFormat = SimpleDateFormat("yyyy")
+    return simpleFormat.format(date1) == simpleFormat.format(date2)
+}
+
 fun isLastDayOfTheMonth() : Boolean
 {
     val now = LocalDate.now()
@@ -35,6 +41,13 @@ fun isLastDayOfTheWeek() : Boolean
 {
     val now = LocalDate.now()
     return now.dayOfWeek.value == 7
+}
+
+fun isLastDayOfTheYear() : Boolean
+{
+    val now = LocalDate.now()
+    val lastDay = now.with(TemporalAdjusters.lastDayOfYear())
+    return now == lastDay
 }
 
 fun getTimeStringFromMilliSeconds(totalTime : Long) : String

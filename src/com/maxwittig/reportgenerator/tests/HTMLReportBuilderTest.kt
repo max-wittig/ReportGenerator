@@ -56,6 +56,15 @@ class HTMLReportBuilderTest
         File("data/testResults/daily.html").writeText(reportBuilder.getReport())
     }
 
+    @Test
+    fun yearlyReportTest()
+    {
+        val taskList = getRandomTimekeeperTaskArrayList()
+        val now = getRandomDateInTheYear()
+        val reportBuilder = HTMLReportBuilder(taskList, ReportType.YEARLY, todaysDate = now)
+        File("data/testResults/yearly.html").writeText(reportBuilder.getReport())
+    }
+
     private fun getRandomWordFromList() : String
     {
         return wordList[Random().nextInt(wordList.size)]

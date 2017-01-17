@@ -7,7 +7,7 @@ class PlainTextReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, report
     override fun getReport() : String
     {
         val stringBuilder = StringBuilder()
-        stringBuilder.append("Time worked today: " + getTotalTimeOfTasksToday())
+        //stringBuilder.append("Time worked today: " + getTotalTimeOfTasksToday())
         stringBuilder.append("\n")
         //stringBuilder.append("Projects worked on today: " + getDailyProjectTimeHashMap())
         return stringBuilder.toString()
