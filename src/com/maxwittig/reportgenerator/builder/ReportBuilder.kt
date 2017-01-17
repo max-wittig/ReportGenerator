@@ -2,6 +2,7 @@ package com.maxwittig.reportgenerator.builder
 
 import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.models.ProjectHolder
+import com.maxwittig.reportgenerator.models.TaskHolder
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.*
 import java.text.SimpleDateFormat
@@ -58,13 +59,41 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             if(isSameYear(todaysDate, task.startTime))
             {
-                task.shownInTaskList = true
                 tasks.add(task)
             }
+        }
+        return getLongestTasksInYear(tasks)
+    }
+
+    private fun getLongestTasksInYear(tasks: ArrayList<TimekeeperTask>) : ArrayList<TimekeeperTask>
+    {
+        //grouped tasks
+        val taskHolder = getGroupedTaskHolder(tasks)
+        var index = 0
+        for(currentTask in taskHolder.tasks)
+        {
+            currentTask.shownInTaskList = true
+            index++
+            if(index >= 10)
+                break
         }
         return tasks
     }
 
+    private fun getGroupedTaskHolder(tasks: ArrayList<TimekeeperTask>) : TaskHolder
+    {
+        val taskHolder = TaskHolder()
+        for(currentTask in tasks)
+        {
+            taskHolder.addTask(currentTask)
+        }
+        return taskHolder
+    }
+
+    /**
+     * helper method, called by getParsedWeeklyTasks()
+     * returns longest task per day of the week
+     */
     private fun getLongestTaskPerDayInTheWeek(tasks: ArrayList<TimekeeperTask>) : ArrayList<TimekeeperTask>
     {
         for(currentDay in DayOfWeek.values())
