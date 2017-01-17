@@ -171,8 +171,9 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         {
             if(isSameDay(todaysDate, task.startTime))
             {
-                task.shownInTaskList = true
-                tasks.add(task.clone())
+                val currentTask = task.clone()
+                currentTask.shownInTaskList = true
+                tasks.add(currentTask)
             }
         }
         return tasks
