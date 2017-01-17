@@ -85,7 +85,7 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
 
     private fun getParsedMonthlyTasks() : ArrayList<TimekeeperTask>
     {
-        var tasks = ArrayList<TimekeeperTask>()
+        val tasks = ArrayList<TimekeeperTask>()
         for(task in timekeeperTasks)
         {
             if(isSameMonth(todaysDate, task.startTime))

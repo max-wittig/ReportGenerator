@@ -60,35 +60,34 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, val reportT
 
     private fun addMonthlyHTML(body : Html)
     {
-        addHTML(monthlyTasks, body, taskString = "Your 10 longest tasks this month")
+        addHTML(monthlyTasks, body, reportType, taskString = "Your 10 longest tasks this month")
     }
 
     private fun addWeeklyHTML(body : Html)
     {
-        addHTML(weeklyTasks, body, taskString =  "Longest weekly tasks per day", format = SimpleDateFormat("EEEE dd.MM.yyyy - HH:mm:ss"))
+        addHTML(weeklyTasks, body, reportType, format = SimpleDateFormat("EEEE dd.MM.yyyy - HH:mm:ss"))
     }
 
     private fun addTodayHTML(body : Html)
     {
-        addHTML(todayTasks, body, taskString = "Daily Tasks")
+        addHTML(todayTasks, body, ReportType.DAILY)
     }
 
     /**
      * called by every reportType. Adds taskTable and projectTable to Body
      */
-    private fun addHTML(tasks: ArrayList<TimekeeperTask>, body: Html,
-                        taskString : String = reportType.reportTypeName + " tasks",
-                        projectString: String = reportType.reportTypeName + " projects",
+    private fun addHTML(tasks: ArrayList<TimekeeperTask>, body: Html, currentReportType: ReportType,
+                        taskString : String = currentReportType.reportTypeName + " tasks",
                         format: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss"))
     {
         body.h3().text(taskString)
         addTaskTable(tasks, body, format)
         body.br().end()
-        body.h3().text(projectString)
-        addProjectTable(body, getProjectTimeHashMap(tasks))
+        body.h3().text(currentReportType.reportTypeName + " projects")
+        addProjectTable(body, getProjectTimeHashMap(tasks), currentReportType)
     }
 
-    private fun addProjectTable(htmlElement: Html, hashMap: Map<String,Long>)
+    private fun addProjectTable(htmlElement: Html, hashMap: Map<String,Long>, currentReportType: ReportType)
     {
         val table = htmlElement.table()
         addTableHead(table, arrayOf("ProjectName", "TotalTime"))
@@ -106,17 +105,17 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, val reportT
         val todayTimeRow = tBody.tr()
         todayTimeRow.td().text("Total Time").end()
 
-        if(reportType == ReportType.MONTHLY)
+        if(currentReportType == ReportType.MONTHLY)
         {
             todayTimeRow.td().text(getTotalTimeOfTasksMonthly()).end()
         }
         else
-        if(reportType == ReportType.WEEKLY)
+        if(currentReportType == ReportType.WEEKLY)
         {
             todayTimeRow.td().text(getTotalTimeOfTasksWeekly()).end()
         }
         else
-        if(reportType == ReportType.DAILY)
+        if(currentReportType == ReportType.DAILY)
         {
             todayTimeRow.td().text(getTotalTimeOfTasksToday()).end()
         }

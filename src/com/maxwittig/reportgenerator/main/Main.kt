@@ -31,7 +31,7 @@ fun main(args: Array<String>)
         val settings = parser.getSettings()
         val mailSender = MailHandler(settings)
         val timekeeperParser = TimekeeperParser(timekeeperFile)
-        val reportType = ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled)
+        val reportType = ReportType.MONTHLY //ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled)
         if (mailType == MailType.PLAIN)
         {
             val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), reportType)
