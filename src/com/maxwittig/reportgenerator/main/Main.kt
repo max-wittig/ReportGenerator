@@ -1,9 +1,9 @@
 package com.maxwittig.reportgenerator.main
 
-import com.maxwittig.reportgenerator.MailType
-import com.maxwittig.reportgenerator.ReportType
 import com.maxwittig.reportgenerator.builder.HTMLReportBuilder
+import com.maxwittig.reportgenerator.builder.MailType
 import com.maxwittig.reportgenerator.builder.PlainTextReportBuilder
+import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.handler.MailHandler
 import com.maxwittig.reportgenerator.parser.ConfigParser
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
@@ -31,7 +31,7 @@ fun main(args: Array<String>)
         val settings = parser.getSettings()
         val mailSender = MailHandler(settings)
         val timekeeperParser = TimekeeperParser(timekeeperFile)
-        val reportType = ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled)
+        val reportType = ReportType.MONTHLY //ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled)
         if (mailType == MailType.PLAIN)
         {
             val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), reportType)

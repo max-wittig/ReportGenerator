@@ -1,13 +1,12 @@
 package com.maxwittig.reportgenerator.tests
 
-import com.maxwittig.reportgenerator.ReportType
 import com.maxwittig.reportgenerator.builder.HTMLReportBuilder
+import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import org.junit.Test
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.ThreadLocalRandom
 
 class HTMLReportBuilderTest
 {
@@ -75,6 +74,6 @@ class HTMLReportBuilderTest
 
     private fun getRandomDuration() : Long
     {
-        return ThreadLocalRandom.current().nextLong(1, 86400000)
+        return (Random().nextDouble()*(86400)).toLong()
     }
 }

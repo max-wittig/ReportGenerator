@@ -1,7 +1,7 @@
 package com.maxwittig.reportgenerator.builder
 
 import com.googlecode.jatl.Html
-import com.maxwittig.reportgenerator.ReportType
+import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.FileUtils
 import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
@@ -9,7 +9,7 @@ import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportType: ReportType, todaysDate : Date = Date()) : ReportBuilder(timekeeperTasks, reportType, todaysDate = todaysDate)
+class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, val reportType: ReportType, todaysDate : Date = Date()) : ReportBuilder(timekeeperTasks, reportType, todaysDate = todaysDate)
 {
     val stringWriter = StringWriter()
     val html = Html(stringWriter)
@@ -60,29 +60,35 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
 
     private fun addMonthlyHTML(body : Html)
     {
-        body.h3().text("Your 10 longest tasks this month").end()
-        val format = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
-        addTaskTable(monthlyTasks, body, format)
-        body.br()
-        addProjectTable(body, getMonthlyProjectTimeHashMap())
+        addHTML(monthlyTasks, body, taskString = "Your 10 longest tasks this month")
     }
 
     private fun addWeeklyHTML(body : Html)
     {
-
+        addHTML(weeklyTasks, body, taskString =  "Longest weekly tasks per day", format = SimpleDateFormat("EEEE dd.MM.yyyy - HH:mm:ss"))
     }
 
     private fun addTodayHTML(body : Html)
     {
-        val format = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
-        body.h3().text("Daily Tasks")
-        addTaskTable(todayTasks, body, format)
-        body.br().end()
-        body.h3().text("Daily Projects")
-        addProjectTable(body, getDailyProjectTimeHashMap())
+        addHTML(todayTasks, body, taskString = "Daily Tasks")
     }
 
-    private fun addProjectTable(htmlElement: Html, hashMap: HashMap<String,Long>)
+    /**
+     * called by every reportType. Adds taskTable and projectTable to Body
+     */
+    private fun addHTML(tasks: ArrayList<TimekeeperTask>, body: Html,
+                        taskString : String = reportType.reportTypeName + " tasks",
+                        projectString: String = reportType.reportTypeName + " projects",
+                        format: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss"))
+    {
+        body.h3().text(taskString)
+        addTaskTable(tasks, body, format)
+        body.br().end()
+        body.h3().text(projectString)
+        addProjectTable(body, getProjectTimeHashMap(tasks))
+    }
+
+    private fun addProjectTable(htmlElement: Html, hashMap: Map<String,Long>)
     {
         val table = htmlElement.table()
         addTableHead(table, arrayOf("ProjectName", "TotalTime"))
@@ -138,13 +144,16 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val reportTy
 
         for(task in tasks)
         {
-            val row = tBody.tr()
-            row.td().text(format.format(task.startTime)).end()
-            row.td().text(format.format(task.endTime)).end()
-            row.td().text(getTimeStringFromMilliSeconds(task.duration*1000)).end()
-            row.td().text(task.projectName).end()
-            row.td().text(task.taskName).end()
-            row.end()
+            if(task.shownInTaskList)
+            {
+                val row = tBody.tr()
+                row.td().text(format.format(task.startTime)).end()
+                row.td().text(format.format(task.endTime)).end()
+                row.td().text(getTimeStringFromMilliSeconds(task.duration * 1000)).end()
+                row.td().text(task.projectName).end()
+                row.td().text(task.taskName).end()
+                row.end()
+            }
         }
         tBody.end()
         table.end()

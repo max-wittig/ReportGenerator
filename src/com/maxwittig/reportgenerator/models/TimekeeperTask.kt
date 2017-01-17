@@ -14,4 +14,7 @@ class TimekeeperTask(taskName : String, projectName : String, startTime : Date, 
         get
     val duration = duration
         get
+    var shownInTaskList = false
+        get
+        set
 }

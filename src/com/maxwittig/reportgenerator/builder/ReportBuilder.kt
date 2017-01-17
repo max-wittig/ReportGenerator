@@ -1,11 +1,13 @@
 package com.maxwittig.reportgenerator.builder
 
-import com.maxwittig.reportgenerator.ReportType
+import com.maxwittig.reportgenerator.builder.ReportType
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
 import com.maxwittig.reportgenerator.utils.isSameDay
 import com.maxwittig.reportgenerator.utils.isSameMonth
 import com.maxwittig.reportgenerator.utils.isSameWeek
+import java.text.SimpleDateFormat
+import java.time.DayOfWeek
 import java.util.*
 
 
@@ -35,9 +37,50 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         for(task in timekeeperTasks)
         {
             if(isSameWeek(todaysDate, task.startTime))
+            {
                 tasks.add(task)
+            }
+        }
+
+        return getLongestTaskPerDayInTheWeek(tasks)
+    }
+
+    private fun getLongestTaskPerDayInTheWeek(tasks: ArrayList<TimekeeperTask>) : ArrayList<TimekeeperTask>
+    {
+        for(currentDay in DayOfWeek.values())
+        {
+            var longestTask : TimekeeperTask? = null
+            val dayTaskList = getTasksPerDay(tasks, currentDay)
+            val longestDuration = -1
+            for(currentTask in dayTaskList)
+            {
+                if(currentTask.duration > longestDuration)
+                {
+                    longestTask = currentTask
+                }
+            }
+
+            if(longestTask != null)
+            {
+                longestTask.shownInTaskList = true
+            }
         }
         return tasks
+    }
+
+    private fun getTasksPerDay(tasks: ArrayList<TimekeeperTask>, dayOfWeek: DayOfWeek) : ArrayList<TimekeeperTask>
+    {
+        val taskList = ArrayList<TimekeeperTask>()
+        for(currentTask in tasks)
+        {
+            //if same day
+            if(SimpleDateFormat("EEEE").format(currentTask.startTime).toUpperCase() == dayOfWeek.toString().toUpperCase())
+            {
+                taskList.add(currentTask)
+            }
+        }
+        taskList.sort({ task1, task2 ->  task1.startTime.compareTo(task2.startTime)})
+        return taskList
     }
 
     private fun getParsedMonthlyTasks() : ArrayList<TimekeeperTask>
@@ -51,12 +94,20 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
             }
         }
         //sort after duration and only show longest 10
-        tasks.sort({ task2, task1 -> task1.duration.compareTo(task2.duration)})
-        if(tasks.size > 10)
+        tasks.sort{ task2, task1 -> task1.duration.compareTo(task2.duration)}
+        val taskLimit = 10
+        if(tasks.size > taskLimit)
         {
-           tasks = ArrayList<TimekeeperTask>(tasks.subList(0, 10))
+            for(currentLongestTask in tasks)
+            {
+                if(tasks.indexOf(currentLongestTask)+1 >= taskLimit)
+                    break
+                currentLongestTask.shownInTaskList = true
+
+            }
         }
 
+        tasks.sort { task1, task2 -> task1.startTime.compareTo(task2.startTime) }
         return tasks
     }
 
@@ -66,7 +117,10 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         for(task in timekeeperTasks)
         {
             if(isSameDay(todaysDate, task.startTime))
+            {
+                task.shownInTaskList = true
                 tasks.add(task)
+            }
         }
         return tasks
     }
@@ -96,22 +150,8 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
         return getTimeStringFromMilliSeconds(totalTime*1000)
     }
 
-    protected fun getMonthlyProjectTimeHashMap() : HashMap<String, Long>
-    {
-        return getProjectTimeHashMap(monthlyTasks)
-    }
 
-    protected fun getWeeklyProjectTimeHashMap() : HashMap<String, Long>
-    {
-        return getProjectTimeHashMap(weeklyTasks)
-    }
-
-    protected fun getDailyProjectTimeHashMap() : HashMap<String, Long>
-    {
-        return getProjectTimeHashMap(todayTasks)
-    }
-
-    private fun getProjectTimeHashMap(tasks : ArrayList<TimekeeperTask>) : HashMap<String, Long>
+    fun getProjectTimeHashMap(tasks : ArrayList<TimekeeperTask>) : Map<String, Long>
     {
         val hashMap = HashMap<String,Long>()
         for(task in tasks)

@@ -5,6 +5,7 @@
   "smtpHost": "smtp.example.com",
   "port":500,
   "dailyReport": true,
-  "weeklyReport": false,
-  "monthlyReport": true
+  "weeklyReport": true,
+  "monthlyReport": true,
+  "yearlyReport": true
 }
