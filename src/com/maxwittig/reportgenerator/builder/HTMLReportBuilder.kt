@@ -2,6 +2,7 @@ package com.maxwittig.reportgenerator.builder
 
 import com.googlecode.jatl.Html
 import com.maxwittig.reportgenerator.builder.ReportType
+import com.maxwittig.reportgenerator.models.ProjectHolder
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.FileUtils
 import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
@@ -84,26 +85,28 @@ class HTMLReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>, val reportT
         addTaskTable(tasks, body, format)
         body.br().end()
         body.h3().text(currentReportType.reportTypeName + " projects")
-        addProjectTable(body, getProjectTimeHashMap(tasks), currentReportType)
+        addProjectTable(body, createProjectHolder(tasks), currentReportType)
     }
 
-    private fun addProjectTable(htmlElement: Html, hashMap: Map<String,Long>, currentReportType: ReportType)
+    private fun addProjectTable(htmlElement: Html, projectHolder : ProjectHolder, currentReportType: ReportType)
     {
         val table = htmlElement.table()
-        addTableHead(table, arrayOf("ProjectName", "TotalTime"))
+        addTableHead(table, arrayOf("ProjectName", "Time"))
         val tBody = table.tbody()
-        for(key in hashMap.keys)
+        for(project in projectHolder.projects)
         {
             val tr = tBody.tr()
             //add projectname
-            tr.td().text(key).end()
+            tr.td().text(project.name).end()
             //add duration
-            tr.td().text(getTimeStringFromMilliSeconds(hashMap.get(key)!!*1000)).end()
+            tr.td().text(getTimeStringFromMilliSeconds(project.totalTime*1000)).end()
             tr.end()
         }
 
         val todayTimeRow = tBody.tr()
-        todayTimeRow.td().text("Total Time").end()
+        todayTimeRow.classAttr("totalTime")
+        val totalTimeTableData = todayTimeRow.td()
+        totalTimeTableData.text("Total Time").end()
 
         if(currentReportType == ReportType.MONTHLY)
         {

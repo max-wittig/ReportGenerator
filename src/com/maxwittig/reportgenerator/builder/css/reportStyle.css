@@ -26,4 +26,10 @@ tbody
 table
 {
     width: 100%;
+    border-collapse:collapse
+}
+
+tr.totalTime
+{
+    border-top: 1px solid darkgray;
 }

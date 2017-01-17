@@ -1,6 +1,7 @@
 package com.maxwittig.reportgenerator.builder
 
 import com.maxwittig.reportgenerator.builder.ReportType
+import com.maxwittig.reportgenerator.models.ProjectHolder
 import com.maxwittig.reportgenerator.models.TimekeeperTask
 import com.maxwittig.reportgenerator.utils.getTimeStringFromMilliSeconds
 import com.maxwittig.reportgenerator.utils.isSameDay
@@ -151,16 +152,15 @@ abstract class ReportBuilder(private val timekeeperTasks : ArrayList<TimekeeperT
     }
 
 
-    fun getProjectTimeHashMap(tasks : ArrayList<TimekeeperTask>) : Map<String, Long>
+    fun createProjectHolder(tasks : ArrayList<TimekeeperTask>) : ProjectHolder
     {
-        val hashMap = HashMap<String,Long>()
+        val projectHolder = ProjectHolder()
         for(task in tasks)
         {
-            hashMap.putIfAbsent(task.projectName, 0)
-            hashMap.put(task.projectName, hashMap.get(task.projectName)!! + task.duration)
+            projectHolder.addTime(task)
         }
 
-        return hashMap
+        return projectHolder
     }
 
     abstract fun getReport() : String
