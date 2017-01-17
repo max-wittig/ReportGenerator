@@ -30,22 +30,19 @@ fun isSameYear(date1 : Date, date2 : Date) : Boolean
     return simpleFormat.format(date1) == simpleFormat.format(date2)
 }
 
-fun isLastDayOfTheMonth() : Boolean
+fun isLastDayOfTheMonth(now : LocalDate = LocalDate.now()) : Boolean
 {
-    val now = LocalDate.now()
     val lastDay = now.with(TemporalAdjusters.lastDayOfMonth())
     return now == lastDay
 }
 
-fun isLastDayOfTheWeek() : Boolean
+fun isLastDayOfTheWeek(now : LocalDate = LocalDate.now()) : Boolean
 {
-    val now = LocalDate.now()
     return now.dayOfWeek.value == 7
 }
 
-fun isLastDayOfTheYear() : Boolean
+fun isLastDayOfTheYear(now : LocalDate = LocalDate.now()) : Boolean
 {
-    val now = LocalDate.now()
     val lastDay = now.with(TemporalAdjusters.lastDayOfYear())
     return now == lastDay
 }

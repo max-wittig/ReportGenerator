@@ -2,6 +2,8 @@ package com.maxwittig.reportgenerator.builder
 
 import com.maxwittig.reportgenerator.utils.isLastDayOfTheMonth
 import com.maxwittig.reportgenerator.utils.isLastDayOfTheWeek
+import com.maxwittig.reportgenerator.utils.isLastDayOfTheYear
+import java.time.LocalDate
 
 
 enum class ReportType(val reportTypeName : String)
@@ -13,19 +15,19 @@ enum class ReportType(val reportTypeName : String)
     YEARLY("Yearly");
     companion object
     {
-        fun getCurrentReportType(weeklyEnabled : Boolean, monthlyEnabled : Boolean, yearlyEnabled : Boolean) : ReportType
+        fun getCurrentReportType(weeklyEnabled : Boolean, monthlyEnabled : Boolean, yearlyEnabled : Boolean, localDate: LocalDate = LocalDate.now()) : ReportType
         {
-            if(yearlyEnabled && isLastDayOfTheWeek())
+            if(yearlyEnabled && isLastDayOfTheYear(now = localDate))
             {
                 return YEARLY
             }
             else
-            if(monthlyEnabled && isLastDayOfTheMonth())
+            if(monthlyEnabled && isLastDayOfTheMonth(now = localDate))
             {
                 return MONTHLY
             }
             else
-            if(weeklyEnabled && isLastDayOfTheWeek())
+            if(weeklyEnabled && isLastDayOfTheWeek(now = localDate))
             {
                 return WEEKLY
             }
