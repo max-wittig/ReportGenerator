@@ -7,6 +7,7 @@ class Settings(val smtpHost : String,
                val password : String,
                val fromName : String,
                val toAddress : String,
+               val dailyReportEnabled : Boolean,
                val weeklyReportEnabled : Boolean,
                val monthlyReportEnabled : Boolean,
                val yearlyReportEnabled : Boolean)

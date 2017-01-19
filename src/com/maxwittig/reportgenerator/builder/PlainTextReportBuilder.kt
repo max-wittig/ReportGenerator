@@ -24,6 +24,7 @@ class PlainTextReportBuilder(timekeeperTasks : ArrayList<TimekeeperTask>,val rep
             ReportType.MONTHLY -> return monthlyTasks
             ReportType.YEARLY -> return yearlyTasks
             ReportType.WEEKLY -> return weeklyTasks
+            ReportType.NONE -> return ArrayList()
         }
     }
 

@@ -8,14 +8,14 @@ import java.time.LocalDate
 
 enum class ReportType(val reportTypeName : String)
 {
-
+    NONE(""),
     DAILY("Daily"),  //current day
     WEEKLY("Weekly"), //every week + current day --> don't do, if month over!
     MONTHLY("Monthly"), //every month + current day
     YEARLY("Yearly");
     companion object
     {
-        fun getCurrentReportType(weeklyEnabled : Boolean, monthlyEnabled : Boolean, yearlyEnabled : Boolean, localDate: LocalDate = LocalDate.now()) : ReportType
+        fun getCurrentReportType(dailyEnabled : Boolean, weeklyEnabled : Boolean, monthlyEnabled : Boolean, yearlyEnabled : Boolean, localDate: LocalDate = LocalDate.now()) : ReportType
         {
             if(yearlyEnabled && isLastDayOfTheYear(now = localDate))
             {
@@ -31,7 +31,13 @@ enum class ReportType(val reportTypeName : String)
             {
                 return WEEKLY
             }
-            return DAILY
+            else
+            if(dailyEnabled)
+            {
+                return DAILY
+            }
+
+            return NONE
         }
     }
 }

@@ -31,7 +31,12 @@ fun main(args: Array<String>)
         val settings = parser.getSettings()
         val mailSender = MailHandler(settings)
         val timekeeperParser = TimekeeperParser(timekeeperFile)
-        val reportType = ReportType.getCurrentReportType(settings.weeklyReportEnabled, settings.monthlyReportEnabled, settings.yearlyReportEnabled)
+        val reportType = ReportType.getCurrentReportType(settings.dailyReportEnabled,settings.weeklyReportEnabled, settings.monthlyReportEnabled, settings.yearlyReportEnabled)
+
+        //end here, if daily report disabled and it's a normal day
+        if(reportType == ReportType.NONE)
+            return
+
         if (mailType == MailType.PLAIN)
         {
             val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), reportType)

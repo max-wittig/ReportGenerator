@@ -25,7 +25,8 @@ class ConfigParser(private val file : File)
         val weeklyReport = jsonObject.get("weeklyReport").asBoolean
         val monthlyReport = jsonObject.get("monthlyReport").asBoolean
         val yearlyReport = jsonObject.get("yearlyReport").asBoolean
-        return Settings(host, port, fromAddress, password, fromAddress, toAddress, weeklyReport, monthlyReport, yearlyReport)
+        val dailyReport = jsonObject.get("dailyReport").asBoolean
+        return Settings(host, port, fromAddress, password, fromAddress, toAddress, dailyReport, weeklyReport, monthlyReport, yearlyReport)
     }
 
 
