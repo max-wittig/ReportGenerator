@@ -4,11 +4,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import java.io.File
 
-class ConfigWriter(val file : File)
-{
-    fun write(fromAddress : String, toAddress : String, password : String, smtpHost : String, port : Int,
-              dailyReport : Boolean, weeklyReport : Boolean, monthlyReport : Boolean, yearlyReport : Boolean)
-    {
+class ConfigWriter(val file: File) {
+    fun write(fromAddress: String, toAddress: String, password: String, smtpHost: String, port: Int,
+              dailyReport: Boolean, weeklyReport: Boolean, monthlyReport: Boolean, yearlyReport: Boolean) {
         val root = JsonObject()
         root.addProperty("fromAddress", fromAddress)
         root.addProperty("toAddress", toAddress)

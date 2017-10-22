@@ -7,31 +7,26 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimekeeperParser(private val file : File)
-{
+class TimekeeperParser(private val file: File) {
     private val timekeeperDateFormat = SimpleDateFormat("dd.MM.yyyy - HH:mm:ss")
 
-    init
-    {
-        if(!file.exists())
-        {
+    init {
+        if (!file.exists()) {
             println(file.name + " doesn't exist!")
             throw IOException("File not found")
         }
     }
 
-    fun getTasks() : ArrayList<TimekeeperTask>
-    {
+    fun getTasks(): ArrayList<TimekeeperTask> {
         val returnList = ArrayList<TimekeeperTask>()
         val jsonObject = JsonParser().parse(file.readText()).asJsonObject
         val taskArray = jsonObject.getAsJsonArray("saveObjectArray")
-        for(taskJsonElement in taskArray)
-        {
+        for (taskJsonElement in taskArray) {
             val taskObject = taskJsonElement.asJsonObject
             val projectName = taskObject.get("projectName").asString
             val taskName = taskObject.get("taskName").asString
-            val startTime : Date = timekeeperDateFormat.parse(taskObject.get("startTime").asString)
-            val endTime : Date = timekeeperDateFormat.parse(taskObject.get("endTime").asString)
+            val startTime: Date = timekeeperDateFormat.parse(taskObject.get("startTime").asString)
+            val endTime: Date = timekeeperDateFormat.parse(taskObject.get("endTime").asString)
             val duration = taskObject.get("durationInSec").asLong
             val task = TimekeeperTask(taskName, projectName, startTime, endTime, duration)
             returnList.add(task)

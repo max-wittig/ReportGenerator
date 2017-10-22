@@ -1,7 +1,6 @@
 package com.maxwittig.reportgenerator.builder
 
-enum class MailType
-{
+enum class MailType {
     PLAIN,
     HTML
 }

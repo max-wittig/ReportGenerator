@@ -9,52 +9,48 @@ import com.maxwittig.reportgenerator.parser.ConfigParser
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
 import java.io.File
 
-fun main(args: Array<String>)
-{
-    if (args.size < 2)
-    {
-        throw IllegalArgumentException("Required arguments: <configFileLocation> <timekeeper.json_file_location> <mailType>[html||plan]")
-    }
-    val configFile = File(args[0])
-    val timekeeperFile = File(args[1])
-    var reportTypeArgumentString: String = "HTML"
-    if (args.size == 3)
-    {
-        reportTypeArgumentString = args[2]
-    }
 
-    val mailType: MailType = MailType.valueOf(reportTypeArgumentString.toUpperCase())
-
-    if (configFile.exists() && timekeeperFile.exists())
-    {
-        val parser = ConfigParser(configFile)
-        val settings = parser.getSettings()
-        val mailSender = MailHandler(settings)
-        val timekeeperParser = TimekeeperParser(timekeeperFile)
-        val reportType = ReportType.getCurrentReportType(settings.dailyReportEnabled,settings.weeklyReportEnabled, settings.monthlyReportEnabled, settings.yearlyReportEnabled)
-
-        //end here, if daily report disabled and it's a normal day
-        if(reportType == ReportType.NONE)
-            return
-
-        if (mailType == MailType.PLAIN)
-        {
-            val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), reportType)
-            //check if mail should be send: e.g. do not send, if today is empty, but send regardless of today, if monthly report
-            if (reportBuilder.shouldSendMail())
-            {
-                mailSender.sendPlainMail(settings.toAddress, reportBuilder.getReport())
-            }
+object Main {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        if (args.size < 3) {
+            throw IllegalArgumentException("Required arguments: <configFileLocation> <timekeeper.json_file_location> <mailType>[html||plan]")
         }
-        else if (mailType == MailType.HTML)
-        {
-            val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks(), reportType)
-            if (reportBuilder.shouldSendMail())
-            {
-                mailSender.sendHTMLMail(settings.toAddress, reportBuilder.getReport())
-            }
+        val configFile = File(args[0])
+        val timekeeperFile = File(args[1])
+        var reportTypeArgumentString = "HTML"
+        if (args.size == 3) {
+            reportTypeArgumentString = args[2]
         }
 
-        println("Mail send successfully!")
+        val mailType: MailType = MailType.valueOf(reportTypeArgumentString.toUpperCase())
+
+        if (configFile.exists() && timekeeperFile.exists()) {
+            val parser = ConfigParser(configFile)
+            val settings = parser.getSettings()
+            val mailSender = MailHandler(settings)
+            val timekeeperParser = TimekeeperParser(timekeeperFile)
+            val reportType = ReportType.getCurrentReportType(settings.dailyReportEnabled, settings.weeklyReportEnabled,
+                    settings.monthlyReportEnabled, settings.yearlyReportEnabled)
+
+            //end here, if daily report disabled and it's a normal day
+            if (reportType == ReportType.NONE)
+                return
+
+            if (mailType == MailType.PLAIN) {
+                val reportBuilder = PlainTextReportBuilder(timekeeperParser.getTasks(), reportType)
+                //check if mail should be send: e.g. do not send, if today is empty, but send regardless of today, if monthly report
+                if (reportBuilder.shouldSendMail()) {
+                    mailSender.sendPlainMail(settings.toAddress, reportBuilder.getReport())
+                }
+            } else if (mailType == MailType.HTML) {
+                val reportBuilder = HTMLReportBuilder(timekeeperParser.getTasks(), reportType)
+                if (reportBuilder.shouldSendMail()) {
+                    mailSender.sendHTMLMail(settings.toAddress, reportBuilder.getReport())
+                }
+            }
+
+            println("Mail send successfully!")
+        }
     }
 }

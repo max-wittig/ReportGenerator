@@ -1,15 +1,13 @@
-package com.maxwittig.reportgenerator.tests.builder
+package tests.builder
 
 import com.maxwittig.reportgenerator.builder.PlainTextReportBuilder
 import com.maxwittig.reportgenerator.builder.ReportType
 import org.junit.Test
 
 
-class PlainTextReportBuilderTest : ReportBuilderTest()
-{
+class PlainTextReportBuilderTest : ReportBuilderTest() {
     @Test
-    fun dailyReportTest()
-    {
+    fun dailyReportTest() {
         val tasks = getRandomTimekeeperTaskArrayList()
         val reportBuilder = PlainTextReportBuilder(tasks, ReportType.DAILY, todaysDate = getRandomDateInTheYear())
         println(reportBuilder.getReport())

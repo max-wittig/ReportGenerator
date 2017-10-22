@@ -5,11 +5,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
 
-class ConfigWriterTest
-{
+class ConfigWriterTest {
     @Test
-    fun writeTest()
-    {
+    fun writeTest() {
         val stringBuilder = StringBuilder()
 
         stringBuilder.append("{")
@@ -25,10 +23,10 @@ class ConfigWriterTest
         stringBuilder.append("}")
 
 
-        val file = File.createTempFile("config","json")
+        val file = File.createTempFile("config", "json")
         file.deleteOnExit()
         val writer = ConfigWriter(file)
-        writer.write("max@example.com","max@example.com","Testing123","smtp.example.com", 500, true, true, true, true)
+        writer.write("max@example.com", "max@example.com", "Testing123", "smtp.example.com", 500, true, true, true, true)
         assertEquals(stringBuilder.toString(), file.readText())
     }
 }

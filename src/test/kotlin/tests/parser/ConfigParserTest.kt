@@ -1,15 +1,13 @@
-package com.maxwittig.reportgenerator.tests.parser
+package tests.parser
 
 import com.maxwittig.reportgenerator.parser.ConfigParser
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
 
-class ConfigParserTest
-{
+class ConfigParserTest {
     @Test
-    fun getSettingsTest()
-    {
+    fun getSettingsTest() {
         val configString = "{" +
                 "  \"fromAddress\":\"max@example.com\"," +
                 "  \"toAddress\":\"max@example.com\"," +
@@ -22,7 +20,7 @@ class ConfigParserTest
                 "  \"yearlyReport\": true" +
                 "}"
 
-        val file = File.createTempFile("config",".json")
+        val file = File.createTempFile("config", ".json")
         file.deleteOnExit()
         file.writeText(configString)
         val parser = ConfigParser(file)

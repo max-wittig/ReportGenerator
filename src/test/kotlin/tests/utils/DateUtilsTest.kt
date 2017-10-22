@@ -1,4 +1,4 @@
-package com.maxwittig.reportgenerator.tests.utils
+package tests.utils
 
 import com.maxwittig.reportgenerator.utils.isSameDay
 import com.maxwittig.reportgenerator.utils.isSameMonth
@@ -8,21 +8,18 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.text.SimpleDateFormat
 
-class DateUtilsTest
-{
+class DateUtilsTest {
     private val format = SimpleDateFormat("dd.MM.yyyy")
 
     @Test
-    fun isSameYearTest()
-    {
+    fun isSameYearTest() {
         val date1 = format.parse("17.01.2017")
         val date2 = format.parse("25.10.2017")
         assertTrue(isSameYear(date1, date2))
     }
 
     @Test
-    fun isSameMonthTest()
-    {
+    fun isSameMonthTest() {
         val date1 = format.parse("17.10.2017")
         val date2 = format.parse("25.10.2017")
         val date3 = format.parse("25.07.2017")
@@ -31,8 +28,7 @@ class DateUtilsTest
     }
 
     @Test
-    fun isSameDayTest()
-    {
+    fun isSameDayTest() {
         val date1 = format.parse("17.10.2017")
         val date2 = format.parse("17.10.2017")
         val date3 = format.parse("25.07.2017")

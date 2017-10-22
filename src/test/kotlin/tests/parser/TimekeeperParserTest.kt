@@ -1,15 +1,13 @@
-package com.maxwittig.reportgenerator.tests.parser
+package tests.parser
 
 import com.maxwittig.reportgenerator.parser.TimekeeperParser
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
 
-class TimekeeperParserTest
-{
+class TimekeeperParserTest {
     @Test
-    fun getTasksTest()
-    {
+    fun getTasksTest() {
         val timekeeperString = "{" +
                 "   \"type\": \"Complete\"," +
                 "   \"saveProjectArray\": [" +
@@ -70,16 +68,14 @@ class TimekeeperParserTest
                 "   \"exportDate\": \"17.01.2017 - 21:41:17\"" +
                 "}"
 
-        val file = File.createTempFile("timekeeper",".json")
+        val file = File.createTempFile("timekeeper", ".json")
         file.deleteOnExit()
         file.writeText(timekeeperString)
         val parser = TimekeeperParser(file)
         val tasks = parser.getTasks()
         assertEquals(tasks.size, 4)
-        for(currentTask in tasks)
-        {
-            if(currentTask.taskName == "AnotherTestTask")
-            {
+        for (currentTask in tasks) {
+            if (currentTask.taskName == "AnotherTestTask") {
                 assertEquals(currentTask.projectName, "TestProject")
                 assertEquals(currentTask.duration, 4)
             }

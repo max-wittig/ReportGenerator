@@ -6,49 +6,41 @@ import java.time.temporal.TemporalAdjusters
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-fun isSameDay(date1 : Date, date2 : Date) : Boolean
-{
+fun isSameDay(date1: Date, date2: Date): Boolean {
     val simpleFormat = SimpleDateFormat("dd.MM.yyyy")
     return simpleFormat.format(date1) == simpleFormat.format(date2)
 }
 
-fun isSameWeek(date1 : Date, date2 : Date) : Boolean
-{
+fun isSameWeek(date1: Date, date2: Date): Boolean {
     val simpleFormat = SimpleDateFormat("w.yyyy")
     return simpleFormat.format(date1) == simpleFormat.format(date2)
 }
 
-fun isSameMonth(date1 : Date, date2 : Date) : Boolean
-{
+fun isSameMonth(date1: Date, date2: Date): Boolean {
     val simpleFormat = SimpleDateFormat("MM.yyyy")
     return simpleFormat.format(date1) == simpleFormat.format(date2)
 }
 
-fun isSameYear(date1 : Date, date2 : Date) : Boolean
-{
+fun isSameYear(date1: Date, date2: Date): Boolean {
     val simpleFormat = SimpleDateFormat("yyyy")
     return simpleFormat.format(date1) == simpleFormat.format(date2)
 }
 
-fun isLastDayOfTheMonth(now : LocalDate = LocalDate.now()) : Boolean
-{
+fun isLastDayOfTheMonth(now: LocalDate = LocalDate.now()): Boolean {
     val lastDay = now.with(TemporalAdjusters.lastDayOfMonth())
     return now == lastDay
 }
 
-fun isLastDayOfTheWeek(now : LocalDate = LocalDate.now()) : Boolean
-{
+fun isLastDayOfTheWeek(now: LocalDate = LocalDate.now()): Boolean {
     return now.dayOfWeek.value == 7
 }
 
-fun isLastDayOfTheYear(now : LocalDate = LocalDate.now()) : Boolean
-{
+fun isLastDayOfTheYear(now: LocalDate = LocalDate.now()): Boolean {
     val lastDay = now.with(TemporalAdjusters.lastDayOfYear())
     return now == lastDay
 }
 
-fun getTimeStringFromMilliSeconds(totalTime : Long) : String
-{
+fun getTimeStringFromMilliSeconds(totalTime: Long): String {
     val hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(totalTime),
             TimeUnit.MILLISECONDS.toMinutes(totalTime) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(totalTime) % TimeUnit.MINUTES.toSeconds(1))

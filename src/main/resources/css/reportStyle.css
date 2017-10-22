@@ -1,35 +1,28 @@
-td
-{
+td {
     text-align: center;
 }
 
-h1, h2, h3
-{
+h1, h2, h3 {
     text-align: center;
 }
 
-h1
-{
+h1 {
     text-decoration: underline;
 }
 
-thead
-{
+thead {
     background: lightgray
 }
 
-tbody
-{
+tbody {
     background: #f2f2f2
 }
 
-table
-{
+table {
     width: 100%;
-    border-collapse:collapse
+    border-collapse: collapse
 }
 
-tr.totalTime
-{
+tr.totalTime {
     border-top: 1px solid darkgray;
 }

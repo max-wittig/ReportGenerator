@@ -1,21 +1,18 @@
 package com.maxwittig.reportgenerator.parser
+
 import com.google.gson.JsonParser
 import com.maxwittig.reportgenerator.models.Settings
 import java.io.File
 
-class ConfigParser(private val file : File)
-{
-    init
-    {
-        if(!file.exists())
-        {
+class ConfigParser(private val file: File) {
+    init {
+        if (!file.exists()) {
             print("File doesn't exist!")
             System.exit(1)
         }
     }
 
-    fun getSettings() : Settings
-    {
+    fun getSettings(): Settings {
         val jsonObject = JsonParser().parse(file.readText()).asJsonObject
         val host = jsonObject.get("smtpHost").asString
         val port = jsonObject.get("port").asInt

@@ -2,10 +2,8 @@ package com.maxwittig.configbuilder
 
 import java.io.File
 
-fun main(args: Array<String>)
-{
-    if(args.isEmpty())
-    {
+fun main(args: Array<String>) {
+    if (args.isEmpty()) {
         throw IllegalArgumentException("Missing argument: file")
     }
     val file = File(args[0])
@@ -37,10 +35,9 @@ fun main(args: Array<String>)
     print("Would you like to receive yearly reports?: (y/n)")
     val yearlyReportString = readLine()
 
-    if(portString != null && smtpHost != null && password != null && toAddress != null && fromAddress != null
+    if (portString != null && smtpHost != null && password != null && toAddress != null && fromAddress != null
             && dailyReportString != null && weeklyReportString != null && monthlyReportString != null
-            && yearlyReportString != null)
-    {
+            && yearlyReportString != null) {
         val dailyReport = dailyReportString.toLowerCase() == "y"
         val weeklyReport = weeklyReportString.toLowerCase() == "y"
         val monthlyReport = monthlyReportString.toLowerCase() == "y"

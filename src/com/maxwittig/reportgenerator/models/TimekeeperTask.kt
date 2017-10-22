@@ -2,8 +2,7 @@ package com.maxwittig.reportgenerator.models
 
 import java.util.*
 
-class TimekeeperTask(taskName : String, projectName : String, startTime : Date, endTime : Date, duration : Long)
-{
+class TimekeeperTask(taskName: String, projectName: String, startTime: Date, endTime: Date, duration: Long) {
     val taskName = taskName
         get
     val projectName = projectName
@@ -19,8 +18,7 @@ class TimekeeperTask(taskName : String, projectName : String, startTime : Date, 
         get
         set
 
-    fun clone() : TimekeeperTask
-    {
+    fun clone(): TimekeeperTask {
         return TimekeeperTask(this.taskName, this.projectName, this.startTime, this.endTime, this.duration)
     }
 }
